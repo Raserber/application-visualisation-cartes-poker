@@ -1,0 +1,14 @@
+{
+  "name": "frontPoker",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Lounès DUPUIS-DABAJI",
+  "license": "",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
