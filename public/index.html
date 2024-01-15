@@ -1,13 +1,18 @@
 <html>
     <head>
-        
+        <link rel="stylesheet" href="./css/style.css">
     </head>
 
     <body>
-        <span id="test"></span>
+        <div class="card figures-D values-7"><h1>7</h1> <div class="figures D"></div> <h1>7</h1></div>
 
         <script>
             const socket = new WebSocket("ws://localhost:7071")
+
+            socket.addEventListener("message", (event) => {
+
+                console.log(event.data)
+            })
         </script>
     </body>
 </html>
