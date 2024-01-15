@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "compile:sass": "sass ./public/css/style.scss ./public/css/style.css -w"
   },
   "author": "Lounès DUPUIS-DABAJI",
   "license": "",
@@ -12,5 +13,8 @@
     "express": "^4.18.2",
     "serialport": "^12.0.0",
     "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "sass": "^1.69.7"
   }
 }

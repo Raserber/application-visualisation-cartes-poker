@@ -1,0 +1,58 @@
+.card {
+  position: relative;
+  height: 70px;
+  width: 50px;
+  display: inline-block;
+  background-color: white;
+  box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  font-family: "Houschka Rounded";
+}
+.card.figures-P, .card.figures-C {
+  color: #515260;
+}
+.card.figures-H, .card.figures-D {
+  color: #EC6E69;
+}
+.card h1 {
+  position: absolute;
+  margin: 0;
+  font-size: 10px;
+  text-align: center;
+}
+.card h1:first-child {
+  top: 5px;
+  left: 5px;
+}
+.card h1:last-child {
+  bottom: 5px;
+  right: 5px;
+  transform: rotatez(180deg);
+}
+.card .figures {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.figures {
+  width: 20px;
+  height: 20px;
+  background-image: url("../img/clovers.svg");
+  background-size: 40px;
+}
+.figures.P {
+  background-position: 0 0;
+}
+.figures.D {
+  background-position: 20px 0;
+}
+.figures.C {
+  background-position: 20px 20px;
+}
+.figures.H {
+  background-position: 0 20px;
+}
+
+/*# sourceMappingURL=style.css.map */

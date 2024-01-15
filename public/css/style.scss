@@ -1,0 +1,97 @@
+.card{
+
+	position:relative;
+	height:70px;
+	width:50px;
+
+	display:inline-block;
+
+	background-color:white;
+
+	box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+	border-radius:5px;
+
+	font-family:"Houschka Rounded";
+	
+
+	&.figures-P, &.figures-C{
+
+		color:#515260;
+	}
+
+
+	&.figures-H, &.figures-D{
+
+		color:#EC6E69;
+	}
+
+	h1{
+
+		position:absolute;
+
+		margin:0;
+
+		font-size:10px;
+		text-align:center;
+
+
+		&:first-child{
+
+			top:5px;
+			left:5px;
+		}
+
+
+		&:last-child{
+
+			bottom:5px;
+			right:5px;
+
+			transform:rotatez(180deg);
+		}
+	}
+
+
+	.figures{
+	
+		position:absolute;
+		top:50%;
+		left:50%;
+	
+		transform:translateX(-50%) translateY(-50%);
+	}
+}
+
+
+.figures{
+
+	width:20px;
+	height:20px;
+
+	background-image:url('../img/clovers.svg');
+	background-size:40px;
+
+
+	&.P{
+
+		background-position:0 0;
+	}
+
+
+	&.D{
+
+		background-position:20px 0;
+	}
+
+
+	&.C{
+
+		background-position:20px 20px;
+	}
+
+
+	&.H{
+		
+		background-position:0 20px;
+	}
+}
