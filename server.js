@@ -1,14 +1,21 @@
 var express = require('express');
 var app = express();
 app.use(express.static(__dirname + '/public')); //__dir and not _dir
-var port = 8000; // you can use any port
-app.listen(port);
-console.log('server on http://localhost:' + port + '/');
+app.listen(8000);
+console.log('✅ Server web (8000)');
 
 // -------------------------------------------
 
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 7071 });
+var wss
+
+try {
+  wss = new WebSocket.Server({ port: 7071 });
+  console.log("✅ Websocket (7071)")
+}
+catch {
+  console.log("🟥 Websocket (7071)")
+}
 
 const clients = new Map();
 
@@ -19,7 +26,7 @@ wss.on('connection', (ws) => {
     clients.set(ws, metadata);
 })
 
-ws.on("close", () => {
+wss.on("close", () => {
     clients.delete(ws);
 });
 
@@ -29,3 +36,23 @@ function uuidv4() {
       return v.toString(16);
     });
   }
+
+
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+
+const serialPort = new SerialPort({ 
+    path: 'COM5',
+    baudRate: 9600 ,
+})
+
+const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }))
+
+parser.on('data', data =>{
+  [...clients.keys()].forEach((client) => {
+    client.send(data);
+  });
+  console.log(data)
+});
+
+console.log('✅ Serial Port (COM5)')
