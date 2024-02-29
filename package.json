@@ -16,5 +16,9 @@
   },
   "devDependencies": {
     "sass": "^1.69.7"
-  }
+  },
+
+  "bin" : {
+    "execute" : "index.js"
+} 
 }
