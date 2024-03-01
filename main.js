@@ -1,12 +1,12 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, autoUpdater, dialog } = require("electron")
+const { app, BrowserWindow, autoUpdater, dialog, ipcMain } = require("electron")
 const path = require("node:path")
 
 if (require("electron-squirrel-startup")) app.quit();
-
+var mainWindow
 function createWindow () {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1900,
     height: 1060,
     webPreferences: {
@@ -34,6 +34,43 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  ipcMain.on('set-title', (event, title) => {
+    console.log(title)
+  })
+  
+  const { SerialPort } = require('serialport')
+  const { ReadlineParser } = require('@serialport/parser-readline')
+  
+  var port
+  var serialPort, parser
+  async function connectToSerial() {
+    await SerialPort.list().then((ports, err) => {
+      port = ports
+    })
+  
+    try {
+      serialPort = new SerialPort({ 
+        path: port[0].path,
+        baudRate: 9600 ,
+      })  
+    }
+    catch {
+      console.log("no connected")
+      setTimeout(connectToSerial, 2000)
+    }
+  
+    serialPort.on("close", s => setTimeout(connectToSerial, 2000))
+    
+    parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }))
+  
+    parser.on('data', data =>{
+      console.log(data)
+      mainWindow.webContents.send('serialport-data', data)
+    });
+  }
+  
+  connectToSerial()  
 })
 
 // Quit when all windows are closed, except on macOS. There, it"s common
@@ -78,35 +115,3 @@ autoUpdater.on('error', (message) => {
   console.error('There was a problem updating the application')
   console.error(message)
 }) */
-
-const { SerialPort } = require('serialport')
-const { ReadlineParser } = require('@serialport/parser-readline')
-
-var port
-var serialPort, parser
-async function connectToSerial() {
-  await SerialPort.list().then((ports, err) => {
-    port = ports
-  })
-
-  try {
-    serialPort = new SerialPort({ 
-      path: port[0].path,
-      baudRate: 9600 ,
-    })  
-  }
-  catch {
-    console.log("no connected")
-    setTimeout(connectToSerial, 2000)
-  }
-
-  serialPort.on("close", s => setTimeout(connectToSerial, 2000))
-  
-  parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }))
-
-  parser.on('data', data =>{
-    console.log(data)
-  });
-}
-
-connectToSerial()

@@ -17,3 +17,10 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${type}-version`, process.versions[type])
   }
 })
+
+const { contextBridge, ipcRenderer } = require('electron/renderer')
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  setTitle: (title) => ipcRenderer.send('set-title', title),
+  onSerialPortData: (callback) => ipcRenderer.on('serialport-data', (_event, value) => callback(value))
+})
