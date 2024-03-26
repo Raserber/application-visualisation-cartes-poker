@@ -40,13 +40,13 @@ window.electronAPI.onSerialPortData((value) => {
     const numeroScanner = data[1]
     const msg = data[2]
 
-    if (msg === "F315D704") changeName("10", "coeur", numeroScanner);
+    if (msg === "F315D704") changeName("10", "pique", numeroScanner);
 
-    else if (msg === "03FD4C06") changeName("A", "trefle", numeroScanner);
+    else if (msg === "03FD4C06") changeName("1", "coeur", numeroScanner);
 
-    else if (msg === "635B3F06") changeName("3", "pique", numeroScanner);
+    else if (msg === "635B3F06") changeName("9", "trefle", numeroScanner);
 
-    else if (msg === "53047106") changeName("R", "carreau", numeroScanner);
+    else if (msg === "53047106") changeName("7", "carreau", numeroScanner);
 
-    else if (msg === "53937006") changeName("D", "coeur", numeroScanner);
+    else if (msg === "53937006") changeName("R", "pique", numeroScanner);
   })
