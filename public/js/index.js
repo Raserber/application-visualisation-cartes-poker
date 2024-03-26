@@ -1,4 +1,4 @@
-window.electronAPI.setTitle("test")
+// window.electronAPI.setTitle("test")
 
 var couleurs
 fetch('./data/couleurs.json')
