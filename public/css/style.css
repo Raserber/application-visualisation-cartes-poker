@@ -1,0 +1,27 @@
+body {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card {
+    
+    width: 30vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
+
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.container {
+
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    font-family: "Comfortaa";
+    text-align: center;
+
+    font-size: 60px;
+
+    margin-top: 6vh;
+}
