@@ -1,6 +1,9 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, autoUpdater, dialog, ipcMain } = require("electron")
+const { app, BrowserWindow, autoUpdater, dialog, ipcMain } = require("electron");
+const { connect } = require("node:http2");
 const path = require("node:path")
+
+var deviceName = null
 
 if (require("electron-squirrel-startup")) app.quit();
 var mainWindow
@@ -35,23 +38,35 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  ipcMain.on('set-title', (event, title) => {
-    console.log(title)
+  ipcMain.on('test-transmission', (event, data) => {
+    console.log(data)
+  })
+  
+  ipcMain.on('return-device-name', (event, data) => {
+
+    port = data
+    waitPortResponse = false
+    connectToSerial()
   })
   
   const { SerialPort } = require('serialport')
   const { ReadlineParser } = require('@serialport/parser-readline')
   
-  var port
+  var port, waitPortResponse = false
   var serialPort, parser
-  async function connectToSerial() {
+  async function listSerialPorts() {
+
     await SerialPort.list().then((ports, err) => {
-      port = ports
+      mainWindow.webContents.send('list-devices', ports);
     })
+
+    waitPortResponse = true
+  }
+  async function connectToSerial() {
   
     try {
       serialPort = new SerialPort({ 
-        path: port[0].path,
+        path: port.path,
         baudRate: 9600 ,
       })  
     }
@@ -70,7 +85,7 @@ app.whenReady().then(() => {
     });
   }
   
-  connectToSerial()  
+  setTimeout(listSerialPorts, 2000)  
 })
 
 // Quit when all windows are closed, except on macOS. There, it"s common

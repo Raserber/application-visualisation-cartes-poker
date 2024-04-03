@@ -21,6 +21,11 @@ window.addEventListener('DOMContentLoaded', () => {
 const { contextBridge, ipcRenderer } = require('electron/renderer')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  setTitle: (title) => ipcRenderer.send('set-title', title),
-  onSerialPortData: (callback) => ipcRenderer.on('serialport-data', (_event, value) => callback(value))
+  // renderer -> Main.js
+  TestTransmission: (data) => ipcRenderer.send('test-transmission', data),
+  returnChoosenDevice: (data) => ipcRenderer.send('return-device-name', data),
+  
+  // Main.js -> renderer
+  onSerialPortData: (callback) => ipcRenderer.on('serialport-data', (_event, value) => callback(value)),
+  onListDevices: (callback) => ipcRenderer.on('list-devices', (_event, value) => callback(value))
 })
