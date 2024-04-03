@@ -1,6 +1,6 @@
-// window.electronAPI.setTitle("test")
+// window.electronAPI.testTransmission("test")
 
-var couleurs
+var couleurs, timerId
 fetch('./data/couleurs.json')
 .then((response) => response.json())
 .then((json) => couleurs = json);
@@ -16,22 +16,22 @@ function changeName(newName, carteCouleur, numeroScanner) {
         number.innerHTML = newName
     })
 
-    switch (carteCouleur) {
-
-        case "coeur" :
-            couleur.innerHTML = couleurs.coeur
-            break
-        case "trefle" :
-            couleur.innerHTML = couleurs.trefle
-            break
-        case "pique" :
-            couleur.innerHTML = couleurs.pique
-            break
-        case "carreau" :
-            couleur.innerHTML = couleurs.carreau
-            break
-    }
+    
+    couleur.innerHTML = couleurs[carteCouleur]
 }
+
+window.electronAPI.onListDevices(async (ports) => {
+
+    const {value: portNumber} = await swal.fire({
+        title: "Choose device",
+        icon: "question",
+        input: "select",
+        clickOutside: false,
+        inputOptions: ports.map(port => {return `0x${port.productId}/0x${port.vendorId} (${port.path})`})
+    })
+
+    window.electronAPI.returnChoosenDevice(ports[portNumber])
+})
 
 window.electronAPI.onSerialPortData((value) => {
     // regular expression (regex) to match the data from Serial port
