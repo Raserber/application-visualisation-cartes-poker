@@ -1,9 +1,13 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, autoUpdater, dialog, ipcMain } = require("electron");
-const { connect } = require("node:http2");
 const path = require("node:path")
 
-var deviceName = null
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+
+var port, deviceName = null
+var serialPort, parser
+
 
 if (require("electron-squirrel-startup")) app.quit();
 var mainWindow
@@ -38,30 +42,24 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  ipcMain.on('test-transmission', (event, data) => {
+  /* ipcMain.on('test-transmission', (event, data) => {
     console.log(data)
-  })
+  }) */
   
   ipcMain.on('return-device-name', (event, data) => {
 
     port = data
-    waitPortResponse = false
-    connectToSerial()
   })
   
-  const { SerialPort } = require('serialport')
-  const { ReadlineParser } = require('@serialport/parser-readline')
-  
-  var port, waitPortResponse = false
-  var serialPort, parser
-  async function listSerialPorts() {
+
+  async function sendListSerialPorts() {
 
     await SerialPort.list().then((ports, err) => {
       mainWindow.webContents.send('list-devices', ports);
     })
-
-    waitPortResponse = true
   }
+
+  
   async function connectToSerial() {
   
     try {
@@ -72,10 +70,12 @@ app.whenReady().then(() => {
     }
     catch {
       console.log("no connected")
+      sendListSerialPorts()
+      port = null
       setTimeout(connectToSerial, 2000)
     }
   
-    serialPort.on("close", s => setTimeout(connectToSerial, 2000))
+    serialPort.on("close", s => { sendListSerialPorts(); port = null; setTimeout(connectToSerial, 2000) })
     
     parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }))
   
@@ -85,7 +85,7 @@ app.whenReady().then(() => {
     });
   }
   
-  setTimeout(listSerialPorts, 2000)  
+  connectToSerial()
 })
 
 // Quit when all windows are closed, except on macOS. There, it"s common

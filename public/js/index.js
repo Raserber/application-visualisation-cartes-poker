@@ -1,6 +1,6 @@
 // window.electronAPI.testTransmission("test")
 
-var couleurs, timerId
+var couleurs, timerId, memPorts = []
 fetch('./data/couleurs.json')
 .then((response) => response.json())
 .then((json) => couleurs = json);
@@ -22,15 +22,24 @@ function changeName(newName, carteCouleur, numeroScanner) {
 
 window.electronAPI.onListDevices(async (ports) => {
 
-    const {value: portNumber} = await swal.fire({
-        title: "Choose device",
-        icon: "question",
-        input: "select",
-        clickOutside: false,
-        inputOptions: ports.map(port => {return `0x${port.productId}/0x${port.vendorId} (${port.path})`})
-    })
+    console.log(ports, memPorts, ports.length, memPorts.length)
+    if (!swal.isVisible() || memPorts.length != ports.length) {
+            
+        memPorts = ports
 
-    window.electronAPI.returnChoosenDevice(ports[portNumber])
+        await swal.fire({
+            title: "Choose device",
+            icon: "question",
+            input: "select",
+            allowOutsideClick: false,
+            inputOptions: ports.map(port => {return `0x${port.productId}/0x${port.vendorId} (${port.path})`})
+        }).then ((result) => {
+    
+            console.log(result)
+
+            window.electronAPI.returnChoosenDevice(ports[result.value])
+        })
+    }
 })
 
 window.electronAPI.onSerialPortData((value) => {
