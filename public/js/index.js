@@ -1,5 +1,25 @@
 // window.electronAPI.testTransmission("test")
 
+function createCard(numeroScanner) {
+    clearTimeout(pqRienAfficher)
+    var div = document.createElement('span');
+    div.setAttribute("class", "container")
+    div.innerHTML = `<span>Lecteur ${numeroScanner}</span><object type="image/svg+xml" data="./img/card.svg" class="card" id="card-${numeroScanner}"></object>`.trim();
+    document.querySelector("body").append(div)
+}
+
+pqRienAfficher = setTimeout(() => {
+    
+    if (!swal.isVisible()) {
+
+        swal.fire({
+            title: "Pourquoi rien ne s'affiche ?",
+            icon: "info",
+            text: "passer une carte sur les lecteurs ou debrancher, rebrancher le cable USB pour voir s'afficher les lecteurs."
+        })
+    }
+}, 5000)
+
 var couleurs, timerId, memPorts = []
 fetch('./data/couleurs.json')
 .then((response) => response.json())
@@ -7,9 +27,17 @@ fetch('./data/couleurs.json')
 
 function changeName(newName, carteCouleur, numeroScanner) {
 
-    const card = document.querySelector(`#card-${numeroScanner}`)
-    numbers = card.contentDocument.querySelectorAll(".number")
-    couleur = card.contentDocument.querySelector(".couleur")
+    try {
+        const card = document.querySelector(`#card-${numeroScanner}`)
+        numbers = card.contentDocument.querySelectorAll(".number")
+        couleur = card.contentDocument.querySelector(".couleur")
+    }
+    catch {
+        console.log("oups");
+        createCard(numeroScanner);
+        setTimeout(() => { changeName(newName, carteCouleur, numeroScanner)}, 100)
+        return;
+    }
 
     numbers.forEach((number) => {
 
@@ -22,20 +50,22 @@ function changeName(newName, carteCouleur, numeroScanner) {
 
 window.electronAPI.onListDevices(async (ports) => {
 
-    console.log(ports, memPorts, ports.length, memPorts.length)
+    var containerCards = document.querySelectorAll(".container")
+
+    containerCards.forEach((el) => el.remove())
+
     if (!swal.isVisible() || memPorts.length != ports.length) {
             
         memPorts = ports
 
         await swal.fire({
-            title: "Choose device",
+            title: "Choisissez un port",
             icon: "question",
             input: "select",
             allowOutsideClick: false,
             inputOptions: ports.map(port => {return `0x${port.productId}/0x${port.vendorId} (${port.path})`})
         }).then ((result) => {
     
-            console.log(result)
 
             window.electronAPI.returnChoosenDevice(ports[result.value])
         })
@@ -44,18 +74,42 @@ window.electronAPI.onListDevices(async (ports) => {
 
 window.electronAPI.onSerialPortData((value) => {
     // regular expression (regex) to match the data from Serial port
-    const regex = /(\d)\|(.*)/g;
-    const data = regex.exec(value)
-    const numeroScanner = data[1]
-    const msg = data[2]
+    const regexIsIUD = /\|/g.test(value);
+    const regexIsFirmware = /\$\$/g.test(value);
+    const regexFirmwareIsFunc = /0xB2/g.test(value);
 
-    if (msg === "F315D704") changeName("10", "pique", numeroScanner);
+    if (regexIsFirmware) {
+        const regex = /(\d)\$\$(.*)/g;
+        const data = regex.exec(value)
+        const numeroScanner = data[1]
+        const msg = data[2]
+        
+        if (regexFirmwareIsFunc) {
+            createCard(numeroScanner);
+        }
+    }
 
-    else if (msg === "03FD4C06") changeName("1", "coeur", numeroScanner);
+    if (regexIsIUD) {
+        const regex = /(\d)\|(.*)/g;
+        const data = regex.exec(value)
+        const numeroScanner = data[1]
+        const msg = data[2]
 
-    else if (msg === "635B3F06") changeName("9", "trefle", numeroScanner);
-
-    else if (msg === "53047106") changeName("7", "carreau", numeroScanner);
-
-    else if (msg === "53937006") changeName("R", "pique", numeroScanner);
+        switch (msg) {
+            case "F315D704" :
+                changeName("10", "pique", numeroScanner)
+                break;
+            case "03FD4C06" :
+                changeName("1", "coeur", numeroScanner)
+                break;
+            case "635B3F06" :
+                changeName("9", "trefle", numeroScanner)
+                break;
+            case "53047106" :
+                changeName("7", "carreau", numeroScanner)
+                break;
+            case "53937006" :
+                changeName("R", "pique", numeroScanner)
+        }
+    }
   })
