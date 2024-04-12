@@ -1,7 +1,7 @@
 module.exports = {
   packagerConfig: {
     asar: true,
-    // icon: "./icon/icon",
+    icon: "./icon/icon",
     executableName: "Lecteur de carte Poker",
     name: "Lecteur de carte Poker"
   },

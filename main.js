@@ -5,6 +5,9 @@ const path = require("node:path")
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 
+const os = require('os');
+const storage = require('electron-json-storage');
+
 var port, deviceName = null
 var serialPort, parser
 
@@ -20,7 +23,7 @@ function createWindow () {
       preload: path.join(__dirname, "preload.js")
     },
     autoHideMenuBar: true,
-    // icon: path.join(__dirname, "icon/icon.png")
+    icon: path.join(__dirname, "icon/icon.png")
   })
 
   // and load the index.html of the app.
@@ -76,6 +79,8 @@ app.whenReady().then(() => {
     }
   
     serialPort.on("close", s => { sendListSerialPorts(); port = null; setTimeout(connectToSerial, 2000) })
+
+    serialPort.on("error", s => { sendListSerialPorts(); port = null; setTimeout(connectToSerial, 2000) })
     
     parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }))
   
