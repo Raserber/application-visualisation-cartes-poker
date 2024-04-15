@@ -1,31 +1,24 @@
-// window.electronAPI.testTransmission("test")
+var storedData = {}
+
+window.electronAPI.storedData("requestData")
 
 function createCard(numeroScanner) {
-    clearTimeout(pqRienAfficher)
+    try {
+        document.querySelectorAll(".container-2")[0].remove()
+    } catch {}
+    
     var div = document.createElement('span');
     div.setAttribute("class", "container")
     div.innerHTML = `<span>Lecteur ${numeroScanner}</span><object type="image/svg+xml" data="./img/card.svg" class="card" id="card-${numeroScanner}"></object>`.trim();
     document.querySelector("body").append(div)
 }
 
-pqRienAfficher = setTimeout(() => {
-    
-    if (!swal.isVisible()) {
-
-        swal.fire({
-            title: "Pourquoi rien ne s'affiche ?",
-            icon: "info",
-            text: "passer une carte sur les lecteurs ou debrancher, rebrancher le cable USB pour voir s'afficher les lecteurs."
-        })
-    }
-}, 5000)
-
 var couleurs, timerId, memPorts = []
 fetch('./data/couleurs.json')
 .then((response) => response.json())
 .then((json) => couleurs = json);
 
-function changeName(newName, carteCouleur, numeroScanner) {
+function changerCarte(newName, carteCouleur, numeroScanner) {
 
     try {
         const card = document.querySelector(`#card-${numeroScanner}`)
@@ -33,20 +26,40 @@ function changeName(newName, carteCouleur, numeroScanner) {
         couleur = card.contentDocument.querySelector(".couleur")
     }
     catch {
-        console.log("oups");
         createCard(numeroScanner);
-        setTimeout(() => { changeName(newName, carteCouleur, numeroScanner)}, 100)
+        setTimeout(() => { changerCarte(newName, carteCouleur, numeroScanner)}, 100)
         return;
     }
 
-    numbers.forEach((number) => {
+    try {
+        numbers.forEach((number) => {
 
-        number.innerHTML = newName
-    })
-
+            number.innerHTML = newName
+        })
     
-    couleur.innerHTML = couleurs[carteCouleur]
+        
+        couleur.innerHTML = couleurs[carteCouleur]
+    }
+
+    catch {
+        if (!swal.isVisible()) {
+            swal.fire({
+                title: "Carte non enregistrée",
+                icon: "warning",
+                allowOutsideClick: true,
+                timer: 2500
+            })
+        }
+    }
 }
+
+
+window.electronAPI.onStoredData((data) => {
+
+    storedData = data
+    
+    console.log(data)
+})
 
 window.electronAPI.onListDevices(async (ports) => {
 
@@ -93,23 +106,8 @@ window.electronAPI.onSerialPortData((value) => {
         const regex = /(\d)\|(.*)/g;
         const data = regex.exec(value)
         const numeroScanner = data[1]
-        const msg = data[2]
+        const UID = data[2]
 
-        switch (msg) {
-            case "F315D704" :
-                changeName("10", "pique", numeroScanner)
-                break;
-            case "03FD4C06" :
-                changeName("1", "coeur", numeroScanner)
-                break;
-            case "635B3F06" :
-                changeName("9", "trefle", numeroScanner)
-                break;
-            case "53047106" :
-                changeName("7", "carreau", numeroScanner)
-                break;
-            case "53937006" :
-                changeName("R", "pique", numeroScanner)
-        }
+        changerCarte(storedData.cards[UID].nombre, storedData.cards[UID].couleur, numeroScanner)
     }
   })
