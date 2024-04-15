@@ -45,9 +45,14 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  /* ipcMain.on('test-transmission', (event, data) => {
-    console.log(data)
-  }) */
+   ipcMain.on('request-stored-data', (event, data) => {
+    mainWindow.webContents.send('stored-data', storage.get("data") | "noData")
+     
+    if (data != "requestData" && typeof data == "object" && data != {}) {
+
+      storage.set("data", data)
+    }
+  })
   
   ipcMain.on('return-device-name', (event, data) => {
 

@@ -22,10 +22,11 @@ const { contextBridge, ipcRenderer } = require('electron/renderer')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   // renderer -> Main.js
-  TestTransmission: (data) => ipcRenderer.send('test-transmission', data),
+  storedData: (data) => ipcRenderer.send('request-stored-data', data),
   returnChoosenDevice: (data) => ipcRenderer.send('return-device-name', data),
   
   // Main.js -> renderer
   onSerialPortData: (callback) => ipcRenderer.on('serialport-data', (_event, value) => callback(value)),
-  onListDevices: (callback) => ipcRenderer.on('list-devices', (_event, value) => callback(value))
+  onListDevices: (callback) => ipcRenderer.on('list-devices', (_event, value) => callback(value)),
+  onStoredData: (callback) => ipcRenderer.on('stored-data', (_event, value) => callback(value))
 })
