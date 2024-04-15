@@ -45,13 +45,14 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-   ipcMain.on('request-stored-data', (event, data) => {
-    mainWindow.webContents.send('stored-data', storage.get("data") | "noData")
+  ipcMain.on('request-stored-data', (event, data) => {
      
-    if (data != "requestData" && typeof data == "object" && data != {}) {
+    if (data != "requestData" && data != undefined) {
 
       storage.set("data", data)
     }
+
+    setTimeout(() => { mainWindow.webContents.send('stored-data', storage.getSync("data")) }, 100)
   })
   
   ipcMain.on('return-device-name', (event, data) => {

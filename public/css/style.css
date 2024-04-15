@@ -38,3 +38,23 @@ body {
 
     margin-top: 6vh;
 }
+
+.radioCouleurs {
+    [type=radio] { 
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      
+      /* IMAGE STYLES */
+      [type=radio] + .swal2-label {
+        cursor: pointer;
+      }
+      
+      /* CHECKED STYLES */
+      [type=radio]:checked + .swal2-label {
+        outline: 2px solid rgb(255, 150, 150);
+        border-radius: 15px;
+      }
+}
