@@ -25,3 +25,16 @@ body {
 
     margin-top: 6vh;
 }
+
+.container-2 {
+
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    font-family: "Comfortaa";
+    text-align: center;
+
+    font-size: 60px;
+
+    margin-top: 6vh;
+}
