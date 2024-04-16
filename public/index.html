@@ -2,12 +2,24 @@
     <head>
         <link rel="stylesheet" href="./css/comfortaaFont.css">
         <link rel="stylesheet" href="./css/style.css">
+        <link rel="stylesheet" href="./css/panel.css">
 
         <script src="./libs/sweetalert2.min.js"></script>
     </head>
 
-    <body style="background-color: rgba(49, 48, 48, 0.24); overflow: hidden;">
-        
+    <body>
+        <div class="panel" id="toggle_leftPanel"><img src="./img/icon.png" /></div>
+        <div class="panel" id="leftPanel" style="left: 0; top: 50px; visibility: hidden;">
+            <!-- <label><input id="" type="checkbox" class="toggle"><span>notifier carte non connue</span></label><br> -->
+            <button id="ajouterCarte" style="font-size: 12px;">ajouter une carte</button>
+            <button id="enleverCarte" style="font-size: 12px;">enlever une carte</button>
+            <button id="montrerCartes" style="font-size: 12px;">voir les cartes</button>
+            <hr>
+            <button id="export" style="font-size: 12px;">export des cartes</button>
+            <button id="import" style="font-size: 12px;">import des cartes</button>
+            <button id="modify" style="font-size: 12px;">Modifier les cartes</button>
+        </div>
+
         <span class="container-2">
             <span>Lecteur</span>
             <object type="image/svg+xml" data="./img/card.svg" class="card" id="card-0"></object>
@@ -17,6 +29,9 @@
             <span>Lecteur</span>
             <object type="image/svg+xml" data="./img/card.svg" class="card" id="card-0"></object>
         </span>
-        <script src="./js/index.js"></script>
+        <img src="./img/IUT1.png" id="logoIUT1" />
     </body>
+        <script src="./js/fonctions_Sweet2Alert.js"></script>
+        <script src="./js/index.js"></script>
+        <script src="./js/gestionPanel.js"></script>
 </html>

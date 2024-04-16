@@ -1,16 +1,28 @@
 body {
     display: flex;
+
+    background-color: rgba(49, 48, 48, 0.24);
+
     justify-content: space-around;
+
+    overflow: hidden;
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 
 .card {
     
-    width: 30vw;
+    width: 50vh;
     /* margin-left: 10vw;
     margin-right: 10vw; */
 
-    margin-top: 2vh;
-    margin-bottom: 2vh;
+    margin: auto;
+    margin-top: 2vh !important;
+    margin-bottom: 2vh !important;
 }
 
 .container {
@@ -40,6 +52,8 @@ body {
 }
 
 .radioCouleurs {
+  
+    background-color: beige;
     [type=radio] { 
         position: absolute;
         opacity: 0;
@@ -47,14 +61,45 @@ body {
         height: 0;
       }
       
-      /* IMAGE STYLES */
       [type=radio] + .swal2-label {
         cursor: pointer;
       }
       
-      /* CHECKED STYLES */
       [type=radio]:checked + .swal2-label {
         outline: 2px solid rgb(255, 150, 150);
         border-radius: 15px;
       }
+}
+
+#logoIUT1 {
+
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+
+	margin: 0.5vw;
+
+	width: 10vw;
+	min-width: 100px;
+
+	filter: drop-shadow(rgba(255,255,255,0.25) 0px 0px 7px);
+
+	z-index: 100;
+}
+
+#flexboxMontrerCartes {
+
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+
+  justify-content: space-around;
+
+  overflow: hidden;
+  overflow-y: scroll !important;
+  
+  max-height: 60vh;
+}
+
+#flexboxMontrerCartes .container {
+  margin-top: 0;
 }

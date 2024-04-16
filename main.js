@@ -11,6 +11,17 @@ const storage = require('electron-json-storage');
 var port, deviceName = null
 var serialPort, parser
 
+storage.has('data', function(error, hasKey) {
+  if (error) throw error;
+
+  if (!hasKey) {
+    storage.set("data", {
+      cards: {
+        
+      }
+    })
+  }
+});
 
 if (require("electron-squirrel-startup")) app.quit();
 var mainWindow
