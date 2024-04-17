@@ -5,7 +5,10 @@ window.electronAPI.storedData("requestData")
 function createCard(numeroScanner) {
     try {
         document.querySelectorAll(".container-2")[0].remove()
-    } catch { return;}
+    } catch {
+        document.querySelectorAll(".container")[0].remove()
+    }
+    
     
     var div = document.createElement('span');
     div.setAttribute("class", "container")
