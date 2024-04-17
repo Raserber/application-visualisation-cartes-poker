@@ -1,11 +1,11 @@
-var storedData = {}, boolVisibilite_leftPanel = true, bool_enleverCarte = false
+var storedData = {}, boolVisibilite_leftPanel = true, bool_enleverCarte = false, bool_choixPort = false
 
 window.electronAPI.storedData("requestData")
 
 function createCard(numeroScanner) {
     try {
         document.querySelectorAll(".container-2")[0].remove()
-    } catch {}
+    } catch { return;}
     
     var div = document.createElement('span');
     div.setAttribute("class", "container")
@@ -25,6 +25,8 @@ function changerCarte(newName, carteCouleur, numeroScanner, boolCreateCard) {
         const card = document.querySelector(`#card-${numeroScanner}`)
         numbers = card.contentDocument.querySelectorAll(".number")
         couleur = card.contentDocument.querySelector(".couleur")
+        svg = card.contentDocument.querySelector("svg")
+        svg.setAttribute("card", numeroScanner)
     }
     catch {
         if (!boolCreateCard) {
@@ -51,22 +53,28 @@ window.electronAPI.onStoredData((data) => {
 
 window.electronAPI.onListDevices(async (ports) => {
 
-    var containerCards = document.querySelectorAll(".container")
-
-    containerCards.forEach((el) => el.remove())
-
-    if (!swal.isVisible() || memPorts.length != ports.length) {
+    if ((!swal.isVisible() && !bool_choixPort) || memPorts.length != ports.length) {
             
         memPorts = ports
+        var containerCards = document.querySelectorAll(".container")
+
+        containerCards.forEach((el) => el.remove())
 
         await swal.fire({
             title: "Choisissez un port",
             icon: "question",
             input: "select",
             allowOutsideClick: false,
+            showDenyButton: true,
             inputOptions: ports.map(port => {return `0x${port.productId}/0x${port.vendorId} (${port.path})`})
         }).then ((result) => {
+            
+            bool_choixPort = false
     
+            if (result.isDenied) {
+
+                bool_choixPort = true
+            }
 
             window.electronAPI.returnChoosenDevice(ports[result.value])
         })
@@ -103,7 +111,7 @@ window.electronAPI.onSerialPortData((value) => {
                 window.electronAPI.storedData(storedData)
                 
                 swal.fire({
-                    title: `carte ${UID} retiree`,
+                    title: `carte ${UID} retir&#233;e`,
                     icon: "success",
                     timer: 2000
                 })
