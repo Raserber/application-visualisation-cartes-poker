@@ -12,7 +12,7 @@ function swalNouvelleCarte(UID) {
     ;(async () => {
         var question
         await swal.fire({
-        title: "carte non enregistree",
+        title: "carte non enregistr&#233;e",
         icon: "warning",
         confirmButtonText: "Enregistrer",
         denyButtonText: "Ne pas enregistrer",
