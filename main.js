@@ -120,8 +120,8 @@ app.on("window-all-closed", function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-/* autoUpdater.setFeedURL({
-  url: "https://github.com/Raserber/UGA_frontPoker/releases/latest/download",
+autoUpdater.setFeedURL({
+  url: "https://github.com/Raserber/application-visualisation-cartes-poker/releases/latest/download",
   headers: {
     "Cache-Control": "no-cache"
   }
@@ -151,4 +151,4 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 autoUpdater.on('error', (message) => {
   console.error('There was a problem updating the application')
   console.error(message)
-}) */
+})
