@@ -6,7 +6,9 @@ function createCard(numeroScanner) {
     try {
         document.querySelectorAll(".container-2")[0].remove()
     } catch {
-        document.querySelectorAll(".container")[0].remove()
+        try {
+            document.querySelectorAll(".container")[0].remove()
+        } catch {}
     }
     
     
