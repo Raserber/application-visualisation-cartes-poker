@@ -114,7 +114,7 @@ For devs :
 
 > The square at top left with the logo is a button opening a configuration menu.
 
-![example image](readme_img/2.PNG)
+![example image](readme_img/2.png)
 ## Acknowledgements
 
 - [Serialport-node](https://github.com/serialport/node-serialport)
