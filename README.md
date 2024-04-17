@@ -29,7 +29,7 @@ You must have Windows system with x64/x86 arch to install the .exe
 ![arduino image](readme_img/3.jpg)
 
 > Code based on MFRC522.h example for multiple readers
-```arduino
+```cpp
 #include <SPI.h>
 #include <MFRC522.h>
 
