@@ -30,7 +30,7 @@ bouton_enleverCarte.addEventListener("click", () => {
     bool_enleverCarte = true
 
     swal.fire({
-        title: "Passez la carte à enlever sur un des lecteurs",
+        title: "Passez la carte &#224; enlever sur un des lecteurs",
         html: "<img src='./img/icon.png' style='width: 70%' />",
         showConfirmButton: false
     }).then(e => {bool_enleverCarte = false})
@@ -38,14 +38,7 @@ bouton_enleverCarte.addEventListener("click", () => {
 
 bouton_montrerCartes.addEventListener("click", () => {
 
-    swal.fire({
-        title: "Cartes enregitrees",
-        html : `<div id="flexboxMontrerCartes"></div>`,
-        width: "800px",
-        background: "#c8c8c8"
-    })
-    
-    setTimeout(generateCard_mc(storedData.cards), 500)
+    montrerCartes()
 })
 
 
@@ -61,7 +54,7 @@ bouton_export.addEventListener("click", () => {
 bouton_import.addEventListener("click", () => {
     
     swal.fire({
-        title: "import WIP",
+        title: "import",
         input: "textarea",
         inputValidator: (str) => {
             try {
@@ -107,6 +100,17 @@ bouton_modify.addEventListener("click", () => {
 })
 // -------------------------------------------------------------------------
 
+function montrerCartes() {
+    swal.fire({
+        title: `Cartes enregitr&#233;es (${Object.keys(storedData.cards).length})`,
+        html : `<div id="flexboxMontrerCartes"></div>`,
+        width: "800px",
+        background: "#c8c8c8"
+    })
+    
+    setTimeout(generateCard_mc(storedData.cards), 500)
+}
+
 function generateCard_mc(cards) {
 
     for (UID in cards) {
@@ -118,7 +122,45 @@ function generateCard_mc(cards) {
 
     try { // setTimeout arrivant apres l'execution du premier 'for',
           // la valeur de UID a été fixé, il prend la derniere valeur avoir été donnée
-        setTimeout(() => {for (UID in cards) {changerCarte(cards[UID].nombre, cards[UID].couleur, "Z" + UID, true)}}, 100)
+        setTimeout(() => {
+            for (UID in cards) {
+                changerCarte(cards[UID].nombre, cards[UID].couleur, "Z" + UID, true)
+                document.querySelector(`#card-Z${UID}`).contentDocument.addEventListener("click", (htmlObject)=> {
+                    var ZUID = htmlObject.target.ownerSVGElement.attributes[6].nodeValue.substring(1)
+
+                    swal.fire({
+                        title: `Carte : ${ZUID}`,
+                        background: "#c8c8c8",
+                        showConfirmButton: true,
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "Changer carte",
+                        denyButtonText: "Supprimer",
+                        cancelButtonText: "Annuler",
+                        html: '<object type="image/svg+xml" data="./img/card.svg" id="card-Y" style="width:150px;"></object>',
+                    }).then((result)=> {
+
+                        if (result.isConfirmed) {
+                            
+                            swalNouvelleCarte(ZUID)
+                            setTimeout(swal.clickConfirm, 10)
+                        }
+
+                        else if (result.isDenied) {
+
+                            delete storedData.cards[ZUID]
+                            window.electronAPI.storedData(storedData)
+                        }
+                        
+                        if (!result.isConfirmed) {
+                            montrerCartes()
+                        }
+                    })
+                    
+                    setTimeout(() => {changerCarte(cards[ZUID].nombre, cards[ZUID].couleur, "Y", true)}, 100)
+                })
+            }
+        }, 100)
     }
     
     catch {
