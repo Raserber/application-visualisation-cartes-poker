@@ -63,7 +63,7 @@ app.whenReady().then(() => {
       storage.set("data", data)
     }
 
-    setTimeout(() => { mainWindow.webContents.send('stored-data', storage.getSync("data")) }, 100)
+    setTimeout(() => { mainWindow.webContents.send('stored-data', storage.getSync("data") || {"cards": {}}) }, 100)
   })
   
   ipcMain.on('return-device-name', (event, data) => {
