@@ -167,3 +167,8 @@ function generateCard_mc(cards) {
         document.querySelector(`#card-${UID}`).remove()
     }
 }
+
+function reload() {
+
+    location.reload()
+  }

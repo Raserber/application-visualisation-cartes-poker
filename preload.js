@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // renderer -> Main.js
   storedData: (data) => ipcRenderer.send('request-stored-data', data),
   returnChoosenDevice: (data) => ipcRenderer.send('return-device-name', data),
+  askFullscreen: () => ipcRenderer.send('ask-fullscreen'),
   
   // Main.js -> renderer
   onSerialPortData: (callback) => ipcRenderer.on('serialport-data', (_event, value) => callback(value)),

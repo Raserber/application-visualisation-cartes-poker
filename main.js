@@ -5,6 +5,8 @@ const path = require("node:path")
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 
+var fullscreen = false
+
 const os = require('os');
 const storage = require('electron-json-storage');
 
@@ -71,6 +73,10 @@ app.whenReady().then(() => {
     port = data
   })
   
+  ipcMain.on("ask-fullscreen", () => {
+    fullscreen = !fullscreen
+    mainWindow.setFullScreen(fullscreen)
+  })
 
   async function sendListSerialPorts() {
 
