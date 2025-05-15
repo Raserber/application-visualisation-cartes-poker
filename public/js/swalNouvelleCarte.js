@@ -10,18 +10,16 @@ function swalNouvelleCarte(UID) {
         showDenyButton: true
     })
     ;(async () => {
-        var question
-        await swal.fire({
-        title: "carte non enregistr&#233;e",
-        icon: "warning",
-        confirmButtonText: "Enregistrer",
-        denyButtonText: "Ne pas enregistrer",
-        showDenyButton: true,
-        timer: 5500
-    }).then(result => {
+      var question
+      await swal.fire({
+      title: "Mince ! Ce n'est pas la bonne carte. Essayez de nouveau",
+      icon: "warning",
+      showDenyButton: false,
+      timer: 5500
+  }).then(result => {
 
-        question = result.isConfirmed
-    })
+      question = false
+  })
 
     console.log(question)
     if (!question) {

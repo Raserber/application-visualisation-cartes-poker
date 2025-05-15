@@ -31,7 +31,7 @@ function creerCarteScanner(numeroScanner) {
 }
 
 
-function changerCarte(newName, carteCouleur, ID, boolCreateCard) {
+async function changerCarte(newName, carteCouleur, ID, boolCreateCard) {
     
 
     try {
@@ -62,4 +62,143 @@ function changerCarte(newName, carteCouleur, ID, boolCreateCard) {
 
     // permet de mettre la nouvelle couleur
     couleur.innerHTML = couleurs[carteCouleur]
+
+    console.log(newName, carteCouleur)
+    if (newName == "1" && carteCouleur == "coeur") {
+
+        var fait = false
+        const canvas = document.getElementById("confettiCanva");
+        canvas.confetti =
+    canvas.confetti || (await confetti.create(canvas, { resize: true }));
+        const count = 200,
+  defaults = {
+    origin: { y: 0.7 },
+  };
+
+  
+
+function fire(particleRatio, opts) {
+  canvas.confetti(
+    Object.assign({}, defaults, opts, {
+      particleCount: Math.floor(count * particleRatio),
+    })
+  );
+}
+
+setTimeout(() => {
+    fire(0.25, {
+        spread: 26,
+        startVelocity: 55,
+      });
+      
+      fire(0.2, {
+        spread: 60,
+      });
+      
+      fire(0.35, {
+        spread: 100,
+        decay: 0.91,
+        scalar: 0.8,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: 0.92,
+        scalar: 1.2,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 45,
+      });
+      fire(0.25, {
+        spread: 26,
+        startVelocity: 55,
+      });
+      
+      fire(0.2, {
+        spread: 60,
+      });
+      
+      fire(0.35, {
+        spread: 100,
+        decay: 0.91,
+        scalar: 0.8,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: 0.92,
+        scalar: 1.2,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 45,
+      });
+}, 10)
+
+    if (fait) {
+
+        return;
+    }
+setTimeout(() => {
+    fire(0.25, {
+        spread: 26,
+        startVelocity: 55,
+      });
+      
+      fire(0.2, {
+        spread: 60,
+      });
+      
+      fire(0.35, {
+        spread: 100,
+        decay: 0.91,
+        scalar: 0.8,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: 0.92,
+        scalar: 1.2,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 45,
+      });
+      fire(0.25, {
+        spread: 26,
+        startVelocity: 55,
+      });
+      
+      fire(0.2, {
+        spread: 60,
+      });
+      
+      fire(0.35, {
+        spread: 100,
+        decay: 0.91,
+        scalar: 0.8,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: 0.92,
+        scalar: 1.2,
+      });
+      
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 45,
+      });
+
+      fait = true
+}, 30)
+    }
 }

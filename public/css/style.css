@@ -73,20 +73,25 @@ body {
       }
 }
 
-#logoIUT1 {
+#logos {
 
-	position: absolute;
-	bottom: 0px;
-	right: 0px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 
-	margin: 0.5vw;
+  margin: 1.75vw;
 
-	width: 10vw;
-	min-width: 100px;
+  width: 20vw;
+  min-width: 200px;
 
-	filter: drop-shadow(rgba(255,255,255,0.25) 0px 0px 7px);
+  filter: drop-shadow(rgba(255,255,255,0.25) 0px 0px 7px);
 
-	z-index: 100;
+  z-index: 100;
+}
+
+#logos img {
+  width: 100%;
+  
 }
 
 #flexboxMontrerCartes {
